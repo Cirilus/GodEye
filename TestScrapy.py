@@ -40,4 +40,5 @@ settings = {
 
 task = scrapyd.schedule('default', 'UsersByGroup',
                         settings=settings,
-                        group=1)
+                        group=1,
+                        offset=0)
