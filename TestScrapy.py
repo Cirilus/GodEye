@@ -11,11 +11,11 @@ settings = {
 }
 
 # Vk User
-# task = scrapyd.schedule('default', 'VKUser',
-#                         settings=settings,
-#                         user=1,
-#                         #user_fields=,
-#                         )
+task = scrapyd.schedule('default', 'VKUser',
+                        settings=settings,
+                        user=1,
+                        #user_fields=,
+                        )
 
 
 #Vk Friends
@@ -38,7 +38,7 @@ settings = {
 
 # UsersByGroup
 
-task = scrapyd.schedule('default', 'UsersByGroup',
-                        settings=settings,
-                        group=1,
-                        offset=0)
+# task = scrapyd.schedule('default', 'UsersByGroup',
+#                         settings=settings,
+#                         group=1,
+#                         offset=0)

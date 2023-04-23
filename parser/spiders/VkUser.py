@@ -31,5 +31,4 @@ class UserSpider(scrapy.Spider):
         self.logger.info(f"parse info about {self.user_id}")
 
         user = json.loads(response.text)['response']
-        print(user)
-        yield user 
+        yield user[0]
