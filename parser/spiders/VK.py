@@ -1,12 +1,13 @@
 import json
+import os
 import pprint
 import time
 
 import scrapy
-
+from dotenv import load_dotenv
 
 pp = pprint.PrettyPrinter()
-
+load_dotenv()
 
 class UserSpider(scrapy.Spider):
     name = "VK"
@@ -15,6 +16,7 @@ class UserSpider(scrapy.Spider):
         self.api_url = "https://api.vk.com"
         self.user_id = 1
         self.api_version = 5.131
+
         self.access_token = "vk1.a.HR9sCHDy2uSggf4uPi8oqzoNjfMIi5_hUQ7KzDkHuy21FPitjo3L1hJwHMB6jJPrdwMovbafh91Ju5CHus953Q_rusHgHQ_4hG2lbGBa65isKPVrdaXVvzkZ4VS6httmXmFIUQKe0lV05w_m_R_xGGDRrMW2NRhfLreHhNiAGFr2dHHBLBaz65fdA0wALTkDE-nO0mHsHJNaGEPGidVzXg"
 
         self.info_fields = "nickname,music,bdate,city,country,education,sex,schools"

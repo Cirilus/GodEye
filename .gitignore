@@ -1,2 +1,27 @@
-parser/__pycache__
-parser/spiders/__pycache__
+.env
+__pycache__
+
+# Build
+/*.egg-info
+/dist
+*.pyc
+
+# Development
+venv
+.vscode
+.idea
+
+# Docs
+/docs/_build
+
+# Tests
+/.coverage
+/_trial_temp
+/dbs
+/htmlcov
+/scrapyd.tests.test_*
+/scrapyd.conf
+/twistd.pid
+/eggs
+/items
+/logs
