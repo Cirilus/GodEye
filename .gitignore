@@ -25,3 +25,5 @@ venv
 /eggs
 /items
 /logs
+
+TestKafka.py
