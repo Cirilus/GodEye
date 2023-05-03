@@ -34,6 +34,7 @@ class UserSpider(scrapy.Spider):
         self.logger.info(f"parse user's groups of user {self.user_id}")
         if "error" not in response.text:
             groups = json.loads(response.text)['response']
+            groups["id"] = self.user_id
         else:
-            groups = "This profile is private"
+            groups = {}
         yield groups

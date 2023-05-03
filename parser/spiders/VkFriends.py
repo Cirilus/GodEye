@@ -35,6 +35,7 @@ class UserSpider(scrapy.Spider):
 
         if "error" not in response.text:
             friends = json.loads(response.text)['response']
+            friends["id"] = self.user_id
         else:
-            friends = "This profile is private"
+            friends = {}
         yield friends
