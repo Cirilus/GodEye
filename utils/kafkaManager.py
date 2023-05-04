@@ -4,7 +4,7 @@ from kafka import KafkaProducer, KafkaConsumer
 import logging
 
 
-class KafkaProducerService:
+class KafkaProducerManager:
     def __init__(self, servers=None):
         if servers is None:
             servers = ['localhost:9092', ]
@@ -26,7 +26,7 @@ class KafkaProducerService:
             logging.error(f"Error at publishing message on topic {topic_name}, err = {e}")
 
 
-class KafkaConsumerService:
+class KafkaConsumerManager:
     def __init__(self):
         pass
 

@@ -16,6 +16,7 @@ itemloaders==1.1.0
 jmespath==1.0.1
 kafka-python==2.0.2
 lxml==4.9.2
+neo4j==5.8.0
 packaging==23.1
 parsel==1.8.1
 Protego==0.2.1
@@ -26,6 +27,7 @@ PyDispatcher==2.0.7
 pymongo==4.3.3
 pyOpenSSL==23.1.1
 python-dotenv==1.0.0
+pytz==2023.3
 queuelib==1.6.2
 requests==2.28.2
 requests-file==1.5.1
