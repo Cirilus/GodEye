@@ -21,40 +21,51 @@ class Neo4jManager:
 
         return response
 
-    def create_VKnode(self, value):
+    def create_vk_user(self, value):
 
-        if value['is_closed']:
-            person = Node("Person", **value)
-            self.driver.create()
-            return 0
+        tx = self.driver.begin()
+        try:
+            city, country, schools = None, None, None
 
-        person = Node("Person", id=value["id"], nickname=value["nickname"], bdate=value["bdate"],
-                      music=value["music"], university=value["university"], university_name=value["university_name"],
-                      faculty=value["faculty"], faculty_name=value["faculty_name"], graduation=value["graduation"],
-                      sex=value["sex"], name=value["first_name"], last_name=value["last_name"],
-                      can_access_closed=value["can_access_closed"], is_closed=value["is_closed"])
-        self.driver.merge(person, "Person", "id")
+            if value.get("city"):
+                city = value.pop("city")
 
-        city = Node("City", id=value["city"]["id"], name=value["city"]["title"])
-        self.driver.merge(city, "City", "id")
+            if value.get("country"):
+                country = value.pop("country")
 
-        city_of = Relationship(person, "city", city)
-        self.driver.merge(city_of, "City", "id")
+            if value.get("schools"):
+                schools = value.pop("schools")
 
-        country = Node("Country", id=value["country"]["id"], title=value["country"]["title"])
-        self.driver.merge(country, "Country", "id")
+            person = Node(name=value.pop("first_name"), **value)
 
-        country_of = Relationship(person, "country", country)
-        self.driver.merge(country_of, "Country", "id")
+            tx.merge(person, "Person", "id")
 
-        schools = value["schools"]
-        for s in schools:
-            school = Node("School", id=s["id"], name=s["name"],
-                          year_from=s["year_from"], year_to=s["year_to"], year_graduated=s.get("year_graduated"))
-            self.driver.merge(school, "School", "id")
+            if city:
+                city = Node("City", id=city["id"], name=city["title"])
+                tx.merge(city, "City", "id")
 
-            school_of = Relationship(person, "school", school)
+                city_of = Relationship(person, "city", city)
+                tx.merge(city_of, "City", "id")
 
-            self.driver.merge(school_of, "School", "id")
+            if country:
+                country = Node("Country", id=country["id"], title=country["title"])
+                tx.merge(country, "Country", "id")
 
+                country_of = Relationship(person, "country", country)
+                tx.merge(country_of, "Country", "id")
+
+            if schools:
+                for s in schools:
+                    school = Node("School", id=s["id"], name=s["name"],
+                                  year_from=s["year_from"], year_to=s["year_to"], year_graduated=s.get("year_graduated"))
+                    tx.merge(school, "School", "id")
+
+                    school_of = Relationship(person, "school", school)
+
+                    tx.merge(school_of, "School", "id")
+
+            tx.commit()
+        except Exception as e:
+            tx.rollback()
+            logging.error(f"Something going wrong in vk_user, err={e}, value = {value}")
         return 0

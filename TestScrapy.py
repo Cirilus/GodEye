@@ -11,11 +11,12 @@ settings = {
 }
 
 # Vk User
-task = scrapyd.schedule('default', 'VKUser',
-                        settings=settings,
-                        user=1,
-                        #user_fields=,
-                        )
+for i in range(1, 20):
+    task = scrapyd.schedule('default', 'VKUser',
+                            settings=settings,
+                            user=i,
+                            #user_fields=,
+                            )
 
 
 #Vk Friends
