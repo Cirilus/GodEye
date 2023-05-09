@@ -28,7 +28,7 @@ class UserSpider(scrapy.Spider):
         yield scrapy.Request(self.url, self.parse)
 
     def parse(self, response, **kwargs):
-        self.logger.info(f"parse info about {self.user_id}")
+        self.log(f"parse info about {self.user_id}")
 
         user = json.loads(response.text)['response']
         yield user[0]

@@ -31,7 +31,7 @@ class UserSpider(scrapy.Spider):
 
     def parse(self, response, **kwargs):
 
-        self.logger.info(f"parse user's friends of  user {self.user_id}")
+        self.log(f"parse user's friends of  user {self.user_id}")
 
         if "error" not in response.text:
             friends = json.loads(response.text)['response']

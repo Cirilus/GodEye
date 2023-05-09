@@ -31,7 +31,7 @@ class UserSpider(scrapy.Spider):
         yield scrapy.Request(self.url, self.parse)
 
     def parse(self, response, **kwargs):
-        self.logger.info(f"parse user's groups of user {self.user_id}")
+        self.log(f"parse user's groups of user {self.user_id}")
         if "error" not in response.text:
             groups = json.loads(response.text)['response']
             groups["id"] = self.user_id

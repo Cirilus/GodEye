@@ -17,11 +17,10 @@ class KafkaProducerManager:
         finally:
             self.producer = _producer
 
-    def publish_message(self, topic_name, key, value):
+    def publish_message(self, topic_name, value):
         try:
-            key_bytes = bytes(key, encoding='utf-8')
             value_bytes = bytes(value, encoding='utf-8')
-            self.producer.send(topic_name, key=key_bytes, value=value_bytes)
+            self.producer.send(topic_name, value=value_bytes)
         except Exception as e:
             logging.error(f"Error at publishing message on topic {topic_name}, err = {e}")
 
@@ -29,6 +28,7 @@ class KafkaProducerManager:
 class KafkaConsumerManager:
     def __init__(self):
         pass
+
 
     def read_messages(self, topic, servers=None):
         if servers is None:
@@ -41,7 +41,6 @@ class KafkaConsumerManager:
 
         messages = []
         for msg in consumer:
-            key = msg.key.decode('utf-8')
             value = json.loads(msg.value.decode('utf-8'))
             messages.append(value)
 

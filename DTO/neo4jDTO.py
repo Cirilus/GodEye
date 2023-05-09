@@ -1,6 +1,8 @@
 from py2neo import Graph, Node, Relationship
 import logging
 
+from DTO.kafkaDTO import KafkaConsumerManager
+
 
 class Neo4jManager:
     def __init__(self, uri="neo4j://localhost:7687", user="neo4j", password="admin123"):
@@ -9,10 +11,9 @@ class Neo4jManager:
         except Exception as e:
             logging.error(f"Cannot connect to neo4j, err= {e}")
 
-    def query(self, query, parameters=None, db=None):
+    def query(self, query, parameters=None):
         response = None
         try:
-            # session = self.driver.run(database=db) if db is not None else self.driver.session()
             response = list(self.driver.run(query, parameters))
         except Exception as e:
             logging.error(f"Cannot to execute the query {query}, err= {e}")
@@ -22,7 +23,7 @@ class Neo4jManager:
         return response
 
     def create_vk_user(self, value):
-
+        logging.info(f"create the User node for {value['id']}")
         tx = self.driver.begin()
         try:
             city, country, schools = None, None, None
@@ -56,8 +57,7 @@ class Neo4jManager:
 
             if schools:
                 for s in schools:
-                    school = Node("School", id=s["id"], name=s["name"],
-                                  year_from=s["year_from"], year_to=s["year_to"], year_graduated=s.get("year_graduated"))
+                    school = Node("School", **s)
                     tx.merge(school, "School", "id")
 
                     school_of = Relationship(person, "school", school)
@@ -67,5 +67,20 @@ class Neo4jManager:
             tx.commit()
         except Exception as e:
             tx.rollback()
-            logging.error(f"Something going wrong in vk_user, err={e}, value = {value}")
+            logging.error(f"Something going wrong in vk_user, err={e}, \n value = {value}")
         return 0
+
+    def create_friends_relation(self, user_id, friends_id):
+        try:
+            logging.info(f"Transfers friends of {user_id}")
+            query = "MERGE (a:Person { id: $user_id })" \
+                    "MERGE (b:Person { id: $friend_id })" \
+                    "CREATE (a)-[:FRIENDS]->(b)"
+            for friend_id in friends_id:
+                response = self.query(query, {"user_id": user_id, "friend_id": friend_id})
+        except Exception as e:
+            logging.error(f"There is an error at {user_id} user_id, err={e}")
+
+
+
+

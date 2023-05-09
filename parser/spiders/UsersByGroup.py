@@ -33,7 +33,7 @@ class UserSpider(scrapy.Spider):
         yield scrapy.Request(self.url, self.parse)
 
     def parse(self, response, **kwargs):
-        self.logger.info(f"parse users of {self.group_id} group")
+        self.log(f"parse users of {self.group_id} group")
         users = json.loads(response.text)['response']
         users["group_id"] = self.group_id
         yield users
